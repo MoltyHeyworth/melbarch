@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    ports:
+      - "3031:3031"
+    environment:
+      - DATABASE_URL=file:./dev.db
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-changeme}
+      - APP_URL=${APP_URL:-http://localhost:3031}
+    volumes:
+      - sqlite-data:/app/prisma
+    restart: unless-stopped
+
+volumes:
+  sqlite-data:

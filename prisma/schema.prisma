@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model House {
+  id                 String   @id @default(cuid())
+  address            String
+  suburb             String
+  state              String   @default("VIC")
+  postcode           String?
+  lat                Float?
+  lng                Float?
+  name               String?
+  yearBuilt          Int
+  yearBuiltApprox    Boolean  @default(false)
+  architectureFirm   String?
+  style              String   @default("[]") // JSON array stored as string for SQLite
+  materials          String   @default("[]") // JSON array stored as string for SQLite
+  bedrooms           Int?
+  landSizeSqm        Float?
+  floorAreaSqm       Float?
+  description        String?
+  architecturalNotes String?
+  sourceReferences   String   @default("[]") // JSON array stored as string for SQLite
+  ownerContact       String?
+  myNotes            String?
+  status             String   @default("UNREVIEWED") // HouseStatus enum as string for SQLite
+  featured           Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  images     Image[]
+  awards     Award[]
+  architects HouseArchitect[]
+}
+
+model Architect {
+  id           String   @id @default(cuid())
+  name         String   @unique
+  altNames     String   @default("[]") // JSON array stored as string for SQLite
+  biography    String?
+  website      String?
+  nationality  String?
+  activePeriod String?
+  createdAt    DateTime @default(now())
+
+  houses HouseArchitect[]
+}
+
+model HouseArchitect {
+  houseId     String
+  architectId String
+  house       House     @relation(fields: [houseId], references: [id], onDelete: Cascade)
+  architect   Architect @relation(fields: [architectId], references: [id], onDelete: Cascade)
+
+  @@id([houseId, architectId])
+}
+
+model Image {
+  id             String   @id @default(cuid())
+  houseId        String
+  house          House    @relation(fields: [houseId], references: [id], onDelete: Cascade)
+  url            String?
+  localPath      String?
+  sourceType     String   // ImageSource enum as string for SQLite
+  sourceCitation String
+  caption        String?
+  sortOrder      Int      @default(0)
+  createdAt      DateTime @default(now())
+}
+
+model Award {
+  id           String  @id @default(cuid())
+  houseId      String
+  house        House   @relation(fields: [houseId], references: [id], onDelete: Cascade)
+  awardName    String
+  awardingBody String?
+  yearAwarded  Int?
+  notes        String?
+}

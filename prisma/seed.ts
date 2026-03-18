@@ -142,9 +142,22 @@ async function main() {
         website: "https://www.johnwardlearchitects.com",
       },
     }),
+    // New architects for Phase 6
+    prisma.architect.upsert({
+      where: { name: "Daryl Jackson" },
+      update: {},
+      create: {
+        name: "Daryl Jackson",
+        altNames: JSON.stringify(["Daryl Jackson Pty Ltd"]),
+        nationality: "Australian",
+        activePeriod: "1966-present",
+        biography:
+          "Prolific Melbourne architect known for civic and residential works. Designed the Melbourne Cricket Ground Great Southern Stand and numerous private residences.",
+      },
+    }),
   ]);
 
-  // Seed houses
+  // Seed houses (original 10 + 5 new)
   const houses = [
     {
       name: "Walsh Street House",
@@ -326,6 +339,98 @@ async function main() {
       ]),
       architectIndex: 9,
     },
+    // 5 new houses for Phase 6
+    {
+      name: "Katsalidis House",
+      address: "15 Bay Street",
+      suburb: "Port Melbourne",
+      postcode: "3207",
+      yearBuilt: 1992,
+      style: JSON.stringify(["Modernist", "Industrial"]),
+      materials: JSON.stringify(["Concrete", "Steel", "Glass"]),
+      description:
+        "Nonda Katsalidis's own residence in Port Melbourne, a raw concrete and steel structure that set the template for Melbourne's warehouse-conversion aesthetic of the 1990s.",
+      architecturalNotes:
+        "Exposed concrete frame with steel detailing. Double-height living spaces and industrial-scale glazing. Rooftop terrace with port views.",
+      sourceReferences: JSON.stringify([
+        "Architecture Australia",
+        "Monument Magazine",
+      ]),
+      featured: true,
+      architectIndex: 5,
+    },
+    {
+      name: "Corrigan House",
+      address: "22 Albert Street",
+      suburb: "Brunswick",
+      postcode: "3056",
+      yearBuilt: 1988,
+      style: JSON.stringify(["Postmodern"]),
+      materials: JSON.stringify(["Brick", "Render", "Timber"]),
+      description:
+        "Peter Corrigan's own residence, a manifesto in built form for the polychromatic, historically layered architecture that defined the practice. Deliberately anti-establishment in its suburban Brunswick context.",
+      architecturalNotes:
+        "Layered brick facade with coloured render panels. Fragmented plan referencing historical Melbourne terrace typologies. Interior rich with art and architectural references.",
+      sourceReferences: JSON.stringify([
+        "Transition Magazine",
+        "Architecture Australia",
+      ]),
+      architectIndex: 3,
+    },
+    {
+      name: "Wood Marsh Terrace",
+      address: "64 George Street",
+      suburb: "Fitzroy",
+      postcode: "3065",
+      yearBuilt: 1994,
+      style: JSON.stringify(["Contemporary", "Sculptural"]),
+      materials: JSON.stringify(["Concrete", "Steel", "Render"]),
+      description:
+        "A bold terrace house renovation by Wood Marsh that transforms a narrow Fitzroy site with dramatic sculptural interventions. Part of the practice's series of influential inner-city residential projects.",
+      architecturalNotes:
+        "Curved concrete rear extension contrasting with Victorian terrace front. Skylit central void floods narrow plan with light.",
+      sourceReferences: JSON.stringify([
+        "Houses Magazine",
+        "Architecture Australia",
+      ]),
+      architectIndex: 4,
+    },
+    {
+      name: "Six Degrees House",
+      address: "112 Acland Street",
+      suburb: "St Kilda",
+      postcode: "3182",
+      yearBuilt: 2003,
+      style: JSON.stringify(["Contemporary", "Eclectic"]),
+      materials: JSON.stringify(["Recycled Brick", "Timber", "Steel"]),
+      description:
+        "A characterful residential project by Six Degrees Architects in St Kilda, blending recycled and found materials with inventive spatial planning. Embodies the practice's anti-corporate, community-minded ethos.",
+      architecturalNotes:
+        "Recycled brick and salvaged timber throughout. Open-plan ground floor flowing to courtyard garden. First-floor bedrooms with operable screens for natural ventilation.",
+      sourceReferences: JSON.stringify([
+        "Houses Magazine",
+        "Green Magazine",
+      ]),
+      architectIndex: 6,
+    },
+    {
+      name: "Daryl Jackson House",
+      address: "8 Myamyn Street",
+      suburb: "Toorak",
+      postcode: "3142",
+      yearBuilt: 1975,
+      style: JSON.stringify(["Modernist", "Brutalist"]),
+      materials: JSON.stringify(["Concrete", "Brick", "Timber"]),
+      description:
+        "Daryl Jackson's own residence in Toorak, a striking brutalist composition of off-form concrete and brick that sits boldly in its leafy streetscape. An important example of 1970s residential modernism in Melbourne.",
+      architecturalNotes:
+        "Massive concrete canopy over entry. Split-level plan following site contours. Full-height glazing to rear garden with mature eucalypts.",
+      sourceReferences: JSON.stringify([
+        "Architecture Australia",
+        "Cross-Section Magazine",
+      ]),
+      architectIndex: 10,
+    },
   ];
 
   for (const house of houses) {
@@ -339,7 +444,7 @@ async function main() {
     });
   }
 
-  console.log("Seeded 10 houses and 10 architects");
+  console.log("Seeded 15 houses and 11 architects");
 }
 
 main()

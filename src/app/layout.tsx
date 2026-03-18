@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import QuickAddModal from "@/components/houses/QuickAddModal";
+import Navbar from "@/components/Navbar";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: "MelbArch — Melbourne Architectural Houses",
+  title: "MelbArch -- Melbourne Architectural Houses",
   description: "A private database of architecturally significant houses in Melbourne, Australia",
 };
 
@@ -17,7 +19,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={cn("font-sans", inter.variable)}>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <Navbar />
+        {children}
+        <QuickAddModal />
+      </body>
     </html>
   );
 }

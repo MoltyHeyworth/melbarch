@@ -10,7 +10,8 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 ENV DATABASE_URL=file:/app/prisma/dev.db
 RUN pnpm prisma generate
-RUN pnpm prisma db push --accept-data-loss
+RUN pnpm prisma migrate deploy
+RUN pnpm prisma db seed
 RUN pnpm build
 
 # Runtime stage
@@ -24,7 +25,7 @@ ENV DATABASE_URL=file:/app/prisma/dev.db
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/prisma/dev.db ./prisma/dev.db
 
 EXPOSE 3031
 CMD ["node", "server.js"]

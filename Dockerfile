@@ -8,10 +8,8 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 COPY . .
-ENV DATABASE_URL=file:/app/prisma/dev.db
+ENV DATABASE_URL=file:/app/prisma/seed.db
 RUN pnpm prisma generate
-RUN pnpm prisma migrate deploy
-RUN pnpm prisma db seed
 RUN pnpm build
 
 # Runtime stage
@@ -20,12 +18,12 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3031
 ENV HOSTNAME=0.0.0.0
-ENV DATABASE_URL=file:/app/prisma/dev.db
+ENV DATABASE_URL=file:/app/prisma/seed.db
 
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/prisma/dev.db ./prisma/dev.db
+COPY --from=builder /app/prisma/seed.db ./prisma/seed.db
 
 EXPOSE 3031
 CMD ["node", "server.js"]

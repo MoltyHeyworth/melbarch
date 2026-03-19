@@ -8,9 +8,9 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 COPY . .
-RUN pnpm prisma generate
-# Need a dummy DB for static page generation at build time
 ENV DATABASE_URL=file:/app/prisma/dev.db
+RUN pnpm prisma generate
+RUN pnpm prisma db push --accept-data-loss
 RUN pnpm build
 
 # Runtime stage

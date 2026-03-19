@@ -1,4 +1,5 @@
 FROM node:22-bookworm-slim AS base
+RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 RUN npm install -g pnpm
 
 # Build stage
@@ -8,6 +9,8 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 COPY . .
 RUN pnpm prisma generate
+# Need a dummy DB for static page generation at build time
+ENV DATABASE_URL=file:/app/prisma/dev.db
 RUN pnpm build
 
 # Runtime stage
